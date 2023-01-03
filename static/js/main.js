@@ -46,6 +46,7 @@ window.onmousemove = (e) => {
 
         if(px !== -1){
             ctx.beginPath();
+            ctx.lineWidth = 5;
             ctx.moveTo(px-c.left, py-c.top);
             ctx.lineTo(x-c.left, y-c.top);
             ctx.stroke();
@@ -60,11 +61,40 @@ window.onmousemove = (e) => {
     }
 }
 
-function saveImg(){
+function startanimation(){
+    document.getElementById('canva').style.display = 'none'
+    document.getElementById('loading').style.display = "block"
+}
+
+function stopanimation(ans){
+    document.getElementById('loading').style.display = 'none'
+    document.getElementById('ans').style.display = "block"
+    document.getElementById('ans').innerHTML = ans
+    document.getElementById('title').innerHTML = "Answer is"
+    document.getElementById('button').innerHTML = "draw next"
+    document.getElementById('button').onclick = () => {location.reload()}
+}
+
+async function saveImg(){
     canva = document.getElementById('canva')
     myImage  = canva.toDataURL("image/png"); 
     
-    imageElement = document.getElementById("input");  
-    imageElement.src = myImage;   
+    
+    
+    console.log(myImage)
+
+    startanimation();
+
+    response = await fetch('/getnum?image='+myImage, {method: 'POST'})
+    .then((response) => response.json())
+    .then((data) => {
+      ans = data; console.log(data)
+    })
+
+    stopanimation(ans);
+
+
+
+
 
 }
