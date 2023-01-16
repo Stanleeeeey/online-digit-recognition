@@ -17,7 +17,9 @@ def main():
 @app.route('/getnum', methods=['POST'])
 def getnum():
     sleep(1)
-    image = request.args.get('image')
+    
+    image = request.data.decode('utf-8')
+    print(image)
 
     with urllib.request.urlopen(image) as response:
         data = response.read()

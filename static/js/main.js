@@ -85,7 +85,17 @@ async function saveImg(){
 
     startanimation();
 
-    response = await fetch('/getnum?image='+myImage, {method: 'POST'})
+
+
+    
+    response = await fetch('/getnum', {
+    method: 'POST',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    },
+    body: myImage
+    })
     .then((response) => response.json())
     .then((data) => {
       ans = data; console.log(data)
