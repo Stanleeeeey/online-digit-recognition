@@ -9,11 +9,25 @@ mouseDown = 0;
 px = -1;
 py = -1;
 
+
+
 onload = function(e){ 
+
 
     mouseDown = 0;
 
+    const select = document.getElementById('value');
     canva = document.getElementById('canva')
+
+    select.addEventListener('change', (event) => {
+        e.preventDefault()
+        // disable the select element while drawing
+        if (event.target !== canva) {
+          select.disabled = mouseDown;
+        }
+      });
+
+
     c = canva.getBoundingClientRect()
 
     canva.width = Math.min(window.innerWidth, window.innerHeight*0.7);
@@ -22,10 +36,23 @@ onload = function(e){
 
 
 
-window.onmousedown = function() { 
+window.onmousedown = function(e) {
+    
+    const select = document.getElementById('value');
+    canva = document.getElementById('canva')
+    if (event.target === canva) {
+        select.disabled = true;
+        
+    }else if(event.target = select){
+        select.size = 10
+    }
+    
     mouseDown+=1;
   }
-window.onmouseup = function() {
+window.onmouseup = function(e) {
+    e.preventDefault()
+    const select = document.getElementById('value');
+    select.disabled = false;
     mouseDown-=1;
     px = -1;
     py = -1
@@ -76,6 +103,8 @@ function stopanimation(ans){
 }
 
 async function saveImg(){
+    document.getElementById('value').size = 1;
+
     canva = document.getElementById('canva')
     myImage  = canva.toDataURL("image/png"); 
     

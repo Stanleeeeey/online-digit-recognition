@@ -63,14 +63,21 @@ button{
 }
 
 select{
+
+    left:0;
     margin:4px;
-    height:36px;
+   z-index: 2;
+   height:min-content;
     border-radius: var(--border-radius);
     border:1px solid var(--text-color);
     padding: .5rem;
     color:var(--text-color);
     background-color: var(--background-color);
 }
+
+select::-webkit-scrollbar {
+    display: none;
+  }
 
 @keyframes rotate {
     0%{
