@@ -1,0 +1,21 @@
+*{
+    --background-color:#101016;
+    --text-color: white;
+    --redirect-color:#D17100;
+    --transition-out:.1s;
+    --transition-in:.2s;
+    --border-radius:12px;
+
+}
+
+body{
+    background-color: var(--background-color);
+
+    font-family: 'Inter', sans-serif;
+
+    
+}
+
+body::-webkit-scrollbar {
+    display: none;
+  }

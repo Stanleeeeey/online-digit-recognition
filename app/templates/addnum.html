@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/addnum.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/global.css')}}">
+    <script type="text/javascript" src="{{url_for('static', filename='js/addnum.js')}}"></script>
+    <title>Identify digits</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="loading" id="loading">
+
+    </div>
+    <div class="content-wrap">
+        <div class="title-wrap">
+        <h1 id="title">Draw a number from 0  to 9 </h1>
+        <select name="" id="value">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+        </select>
+
+        </div>
+        <canvas id="canva">
+
+        </canvas>
+        <h1 style="display: none" class="ans" id="ans"></h1>
+
+
+        <button id="button" onclick="saveImg()">submit </button>
+    </div>
+
+</body>
+</html>
