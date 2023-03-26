@@ -33,8 +33,9 @@
         <div class="identify-wrap">
             {%for i in images%}
             <div class="card">
-                <img src="{{url_for('static', filename='images/image' + i + '.png')}}" alt="">
-                <button class="remove">remove</button>
+                <h1>{{i[0]}}</h1>
+                <img src="{{url_for('static', filename='images/' + i[1])}}" alt="" >
+                <button class="remove" onclick="Remove({{i[2]}},{{i[0]}})">remove</button>
             </div>
             {%endfor%}
         </div>

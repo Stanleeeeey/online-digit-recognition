@@ -18,7 +18,7 @@ def main():
     dotenv.load_dotenv(dotenv_file)
     NEXT_ID = int(os.environ["NEXT_ID"])
     print(NEXT_ID)
-    return render_template('main.html', images = [str(i) for i in range(NEXT_ID+1)])
+    return render_template('main.html', images = [ (str(i)[0], str(i), str(i)[2::-4]) for i in os.listdir(os.path.join(os.getcwd(), 'app/static/images'))])
 
 @app.route('/ask')
 def ask():
@@ -34,9 +34,9 @@ def getnum():
     dotenv.load_dotenv(dotenv_file)
     NEXT_ID = int(os.environ["NEXT_ID"])
 
-    print('c')
+
     data = request.get_json()
-    print('d')
+
     image = data.get('image')
     value = data.get('value')
     #image = request.data.decode('utf-8')
@@ -47,16 +47,16 @@ def getnum():
         data = response.read()
     print(NEXT_ID
     )
-    with open(f"app/static/images/image{NEXT_ID}.png", "wb") as f:
+    with open(f"app/static/images/{value}_{NEXT_ID}.png", "wb") as f:
         f.write(data)
 
 
-    im = Image.open(f'app/static/images/image{NEXT_ID}.png')
+    im = Image.open(f'app/static/images/{value}_{NEXT_ID}.png')
 
     im = im.resize((12,12))
 
     im = im.point(lambda x: 255 if x > 0 else 0)
-    im.save(f'app/static/images/image{NEXT_ID}.png')
+    im.save(f'app/static/images/{value}_{NEXT_ID}.png')
 
     
     dotenv.set_key(dotenv_file, "NEXT_ID", str(NEXT_ID+1))
@@ -64,3 +64,12 @@ def getnum():
   
 
     return "0"
+
+@app.route('/delete', methods = ['POST'])
+def delete():
+    data = request.get_json()
+
+    id = data.get('id')
+    label = data.get('label')
+
+    os.remove(os.path.join(os.getcwd(), f'app/static/images/{id}_{label}.png'))

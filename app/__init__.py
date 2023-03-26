@@ -11,8 +11,10 @@ from threading import Thread
 
 app = Flask(__name__)
 
-from app import routes
-t = Thread(target = app.run)
+from app import routes, perceptron
+webapp = Thread(target = app.run)
+train  = Thread(target = perceptron.run)
 
-t.run()
+train.run()
+webapp.run()
 
