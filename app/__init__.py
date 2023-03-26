@@ -15,6 +15,10 @@ from app import routes, perceptron
 webapp = Thread(target = app.run)
 train  = Thread(target = perceptron.run)
 
-train.run()
-webapp.run()
+webapp.start()
+train.start()
+
+webapp.join()
+train.join()
+
 

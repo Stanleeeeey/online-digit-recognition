@@ -94,14 +94,20 @@ async function saveImg(){
         'Accept': 'application/json',
         'Content-Type': 'application/json'
     },
-    body: myImage
+    body: JSON.stringify({
+        "image":myImage
+    })
     })
     .then((response) => response.json())
     .then((data) => {
       ans = data; console.log(data)
     })
 
-    stopanimation(ans);
+    if(ans !== "10"){
+        stopanimation(ans);
+    }else{
+        stopanimation("fail")
+    }
 
 
 

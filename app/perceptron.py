@@ -1,5 +1,7 @@
 
 import numpy as np
+import os
+from PIL import Image
 
 def encode(lbls):
     nb = len(lbls)
@@ -80,16 +82,37 @@ def Update(biases, weights, model_input, labels, learning_rate):
 
 
 def load_data():
-    data = MNIST(os.getcwd())
+    labels = np.array([])
+    images = np.array([])
 
-    images, labels = data.load_training()
+    for image in os.listdir(os.path.join(os.getcwd(), 'app/static/images')):
+        np.append(labels,int(image[0]))
+        np.append(images, np.mean(np.asarray(Image.open(os.path.join(os.getcwd(), f'app/static/images/{image}'))), -1).reshape(-1, 1))
 
-    print(f'loaded {len(images)} training images and labels')
+    return labels, images
 
-    test_images, test_labels = data.load_testing()
+    
 
-    print(f'loaded {len(test_images)} testing images and labels')
-    return images, labels, test_images, test_labels
 
 def run():
-    pass
+    import csv
+    print("training started")
+    net = init_network([784,28,10])
+    i = 0
+    while True:
+        labels, images = load_data()
+        for img, lbl in zip(images, labels):
+            net, err = Update(*net, model_input=img, labels=lbl, learning_rate=0.3)
+        
+        if i%50 ==0:
+            list_of_lists = [[i.tolist() for i in arr] for arr in net]
+
+            #print(list_of_lists)
+            
+            with open(os.path.join(os.getcwd(), f'app/static/net/net.npy'), 'wb') as f:
+                np.save(f, np.array(net, dtype = "object"))
+                
+            
+            i = 0
+        i+=1
+            
