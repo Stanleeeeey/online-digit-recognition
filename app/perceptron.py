@@ -45,6 +45,7 @@ def init_network(sizes):
 def Update(biases, weights, model_input, labels, learning_rate):
     # batch size
     batch_size = float(model_input.shape[-1])
+    #print(batch_size)
     
     # forward
     ai = model_input
@@ -60,10 +61,10 @@ def Update(biases, weights, model_input, labels, learning_rate):
 
     # norm
     # 
-    error = (labels*np.log(a[-1]) + np.log(1-labels)*np.log(1-a[-1])).sum()/batch_size #np.linalg.norm(a[-1] - labels)/batch_size
+    error = np.linalg.norm(a[-1] - labels)/batch_size #(labels*np.log(a[-1]) + np.log(1-labels)*np.log(1-a[-1])).sum()/batch_size #
     
     # backward
-    dlt = a[-1] - labels #(a[-1]-labels)*sgm_prime(z[-1]) /batch_size
+    dlt = (a[-1]-labels)*sgm_prime(z[-1]) /batch_size #a[-1] - labels #
     
     # update 
     new_biases = biases
@@ -71,7 +72,7 @@ def Update(biases, weights, model_input, labels, learning_rate):
 
     for layer_index in range(len(weights)-1, 0, -1):
 
-        dlt =  weights[layer_index].T@ dlt * sgm_prime(z[layer_index-1]) #weights[layer_index].T@dlt * sgm_prime(z[layer_index-1])
+        dlt = weights[layer_index].T@dlt * sgm_prime(z[layer_index-1]) # weights[layer_index].T@ dlt * sgm_prime(z[layer_index-1]) #
     
 
 
@@ -82,13 +83,15 @@ def Update(biases, weights, model_input, labels, learning_rate):
 
 
 def load_data():
-    labels = np.array([])
-    images = np.array([])
+    labels = []
+    images = []
 
     for image in os.listdir(os.path.join(os.getcwd(), 'app/static/images')):
-        np.append(labels,int(image[0]))
-        np.append(images, np.mean(np.asarray(Image.open(os.path.join(os.getcwd(), f'app/static/images/{image}'))), -1).reshape(-1, 1))
 
+        labels.append(int(image[0]))
+        
+        images.append(np.mean(np.asarray(Image.open(os.path.join(os.getcwd(), f'app/static/images/{image}'))), -1).reshape(-1, 1))
+    
     return labels, images
 
     
@@ -100,13 +103,15 @@ def run():
     net = init_network([784,28,10])
     i = 0
     while True:
-        labels, images = load_data()
-        for img, lbl in zip(images, labels):
-            net, err = Update(*net, model_input=img, labels=lbl, learning_rate=0.3)
         
+        labels, images = load_data()
+        
+        for img, lbl in zip(images, labels):
+ 
+            net, err = Update(*net, model_input=img, labels=lbl, learning_rate=0.3)
+            print(err)
         if i%50 ==0:
             list_of_lists = [[i.tolist() for i in arr] for arr in net]
-
             #print(list_of_lists)
             
             with open(os.path.join(os.getcwd(), f'app/static/net/net.npy'), 'wb') as f:
