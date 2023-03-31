@@ -4,7 +4,7 @@ import os
 from PIL import Image
 
 def encode(lbls):
-    nb = len(lbls)
+    nb = 1
     aL = np.zeros([10, nb], dtype = float)
     aL[lbls, np.arange(nb)] = 1
     return aL
@@ -62,7 +62,7 @@ def Update(biases, weights, model_input, labels, learning_rate):
     # norm
     # 
     error = np.linalg.norm(a[-1] - labels)/batch_size #(labels*np.log(a[-1]) + np.log(1-labels)*np.log(1-a[-1])).sum()/batch_size #
-    
+    print(error)
     # backward
     dlt = (a[-1]-labels)*sgm_prime(z[-1]) /batch_size #a[-1] - labels #
     
@@ -90,15 +90,17 @@ def load_data():
 
         labels.append(int(image[0]))
         
-        images.append(np.mean(np.asarray(Image.open(os.path.join(os.getcwd(), f'app/static/images/{image}'))), -1).reshape(-1, 1))
+        images.append(np.max(np.asarray(Image.open(os.path.join(os.getcwd(), f'app/static/images/{image}'))), -1).reshape(-1, 1))
     
+
+    #labels = encode(labels).T
     return labels, images
 
     
 
 
 def run():
-    import csv
+    import time
     print("training started")
     net = init_network([784,28,10])
     i = 0
@@ -107,9 +109,11 @@ def run():
         labels, images = load_data()
         
         for img, lbl in zip(images, labels):
- 
-            net, err = Update(*net, model_input=img, labels=lbl, learning_rate=0.3)
-            print(err)
+            print(img.shape, lbl, encode(lbl))
+            time.sleep(1)
+            #break
+            net, err = Update(*net, model_input=img, labels=encode(lbl), learning_rate=0.3)
+            #print(err)
         if i%50 ==0:
             list_of_lists = [[i.tolist() for i in arr] for arr in net]
             #print(list_of_lists)
@@ -120,4 +124,5 @@ def run():
             
             i = 0
         i+=1
+        #break
             
