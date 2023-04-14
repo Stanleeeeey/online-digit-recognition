@@ -18,7 +18,7 @@ from app.perceptron import forward, decode
 @app.route('/')
 def main():
 
-    return render_template('main.html', images = [ (str(i)[0], str(i), str(i)[2::-4]) for i in os.listdir(os.path.join(os.getcwd(), 'app/static/images'))])
+    return render_template('main.html', images = [ (str(i)[0],str(i), ''.join( str(i).split('_')[1]).split('.')[0]) for i in os.listdir(os.path.join(os.getcwd(), 'app/static/images'))])
 
 @app.route('/ask')
 def ask():
@@ -77,9 +77,6 @@ def getnum():
 
     image = data.get('image')
     value = data.get('value')
-    #image = request.data.decode('utf-8')
-
-    #val = request.data.decode('utf-8')['value']
 
     with urllib.request.urlopen(image) as response:
         data = response.read()
@@ -111,9 +108,14 @@ def delete():
 
     id = data.get('id')
     label = data.get('label')
+    print("attempt in removing")
     while True:
         try:
             os.remove(os.path.join(os.getcwd(), f'app/static/images/{label}_{id}.png'))
+            print("attempt")
             break
         except:
+            print(f'app/static/images/{label}_{id}.png')
             pass
+
+    print("succes")

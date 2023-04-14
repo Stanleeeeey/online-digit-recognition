@@ -3,6 +3,9 @@ import numpy as np
 import os
 from PIL import Image
 
+
+import numpy as np
+
 def encode(lbls):
     nb = 1
     aL = np.zeros([10, nb], dtype = float)
@@ -45,7 +48,6 @@ def init_network(sizes):
 def Update(biases, weights, model_input, labels, learning_rate):
     # batch size
     batch_size = float(model_input.shape[-1])
-    #print(batch_size)
     
     # forward
     ai = model_input
@@ -62,7 +64,7 @@ def Update(biases, weights, model_input, labels, learning_rate):
     # norm
     # 
     error = np.linalg.norm(a[-1] - labels)/batch_size #(labels*np.log(a[-1]) + np.log(1-labels)*np.log(1-a[-1])).sum()/batch_size #
-    print(error)
+    
     # backward
     dlt = (a[-1]-labels)*sgm_prime(z[-1]) /batch_size #a[-1] - labels #
     
@@ -72,7 +74,7 @@ def Update(biases, weights, model_input, labels, learning_rate):
 
     for layer_index in range(len(weights)-1, 0, -1):
 
-        dlt = weights[layer_index].T@dlt * sgm_prime(z[layer_index-1]) # weights[layer_index].T@ dlt * sgm_prime(z[layer_index-1]) #
+        dlt =  weights[layer_index].T@ dlt * sgm_prime(z[layer_index-1]) #weights[layer_index].T@dlt * sgm_prime(z[layer_index-1])
     
 
 
@@ -81,18 +83,18 @@ def Update(biases, weights, model_input, labels, learning_rate):
 
     return [new_biases, new_weights], error 
 
-
 def load_data():
     labels = []
     images = []
+    try:
+        for image in os.listdir(os.path.join(os.getcwd(), 'app/static/images')):
 
-    for image in os.listdir(os.path.join(os.getcwd(), 'app/static/images')):
-
-        labels.append(int(image[0]))
+            labels.append(encode(int(image[0])))
+            
+            images.append(np.max(np.asarray(Image.open(os.path.join(os.getcwd(), f'app/static/images/{image}'))), -1).reshape(-1, 1).astype(float)/256)
         
-        images.append(np.max(np.asarray(Image.open(os.path.join(os.getcwd(), f'app/static/images/{image}'))), -1).reshape(-1, 1))
-    
-
+    except:
+        labels, images = load_data()
     #labels = encode(labels).T
     return labels, images
 
@@ -104,16 +106,22 @@ def run():
     print("training started")
     net = init_network([784,28,10])
     i = 0
+    with open(os.path.join(os.getcwd(), f'app/static/net/net.npy'), 'wb') as f:
+        np.save(f, net)
+    
+    net = (net[0], net[1])
+
     while True:
         
         labels, images = load_data()
         
         for img, lbl in zip(images, labels):
-            print(img.shape, lbl, encode(lbl))
-            time.sleep(1)
-            #break
-            net, err = Update(*net, model_input=img, labels=encode(lbl), learning_rate=0.3)
-            #print(err)
+            
+            
+           
+            net, err = Update(*net, model_input=img, labels=lbl, learning_rate=0.3)
+            #print(err, img.shape)
+
         if i%50 ==0:
             list_of_lists = [[i.tolist() for i in arr] for arr in net]
             #print(list_of_lists)

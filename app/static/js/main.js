@@ -17,6 +17,6 @@ async function Remove(id, label){
           ans = data
         })
 
-        window.location.reload()
+        location.reload()
     
 }
