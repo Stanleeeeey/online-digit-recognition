@@ -113,25 +113,27 @@ def run():
     print("training started")
     net = init_network([784,28,10])
     i = 0
+
+    #try to open the file with pretrained network
     with open(os.path.join(os.getcwd(), f'app/static/net/net.npy'), 'wb') as f:
-        np.save(f, net)
+        net = np.load(f)
     
-    net = (net[0], net[1])
+        net = (net[0], net[1])
+
 
     while True:
-        
+        #load data
         labels, images = load_data()
         
+        #for every image in images, labels
         for img, lbl in zip(images, labels):
             
             
            
             net, err = Update(*net, model_input=img, labels=lbl, learning_rate=0.3)
-            #print(err, img.shape)
+            
 
         if i%50 ==0:
-            list_of_lists = [[i.tolist() for i in arr] for arr in net]
-            #print(list_of_lists)
             
             with open(os.path.join(os.getcwd(), f'app/static/net/net.npy'), 'wb') as f:
                 np.save(f, np.array(net, dtype = "object"))
@@ -139,5 +141,3 @@ def run():
             
             i = 0
         i+=1
-        #break
-            
