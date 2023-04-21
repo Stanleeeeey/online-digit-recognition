@@ -17,16 +17,17 @@ from app.perceptron import forward, decode
 
 @app.route('/')
 def main():
-
+    #renders main page
     return render_template('main.html', images = [ (str(i)[0],str(i), ''.join( str(i).split('_')[1]).split('.')[0]) for i in os.listdir(os.path.join(os.getcwd(), 'app/static/images'))])
 
 @app.route('/ask')
 def ask():
+    #form for identifying numbers
     return render_template('question.html')
 
 @app.route('/getnum', methods=['POST'])
 def guess():
-
+    #when user submit form from /ask
 
     data = request.get_json()
 
@@ -64,10 +65,13 @@ def guess():
 
 @app.route('/add')
 def addnum():
+    #form for adding numbers
     return render_template('addnum.html')
 
 @app.route('/addnum', methods=['POST'])
 def getnum():
+    #when user submits form from /add
+
     dotenv_file = dotenv.find_dotenv()
     dotenv.load_dotenv(dotenv_file)
     NEXT_ID = int(os.environ["NEXT_ID"])
@@ -104,6 +108,8 @@ def getnum():
 
 @app.route('/delete', methods = ['POST'])
 def delete():
+    #when user wants to delete image 
+
     data = request.get_json()
 
     id = data.get('id')
