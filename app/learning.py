@@ -1,6 +1,9 @@
 from app.perceptron import *
 import os
 from PIL import Image
+import random
+
+BATCH_SIZE = 10
 
 def load_data():
     labels = []
@@ -34,19 +37,26 @@ def run():
         net = (net[0], net[1])
     except:
         net = init_network([784,28,10])
-
+    net = init_network([784,28,10])
     while True:
         #load data
         labels, images = load_data()
-        
+
+        #shuffle data to minimize chance of batch of only 0 or only 1 
+        zipped = list(zip(labels, images))
+        random.shuffle(zipped)
+        labels, images = zip(*zipped)
+
+        #create batches of data
+        labels = [np.array(labels[slice(i, i+BATCH_SIZE, 1)])[:,:,0] for i in range(i, len(labels), BATCH_SIZE)]
+        images = [np.array(images[slice(i, i+BATCH_SIZE, 1)])[:,:,0].T for i in range(i, len(images), BATCH_SIZE)]
         #for every image in images, labels
         for img, lbl in zip(images, labels):
             
-            
-           
             net, err = Update(*net, model_input=img, labels=lbl, learning_rate=0.3)
-            
-
+            print(err)
+        #    break
+        #break
         if i%50 ==0:
             
             with open(os.path.join(os.getcwd(), f'app/static/net/net.npy'), 'wb') as f:

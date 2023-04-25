@@ -1,7 +1,6 @@
 
 import numpy as np
-import os
-from PIL import Image
+
 import numpy as np
 
 #encodes labels ex. 1 -> [0,1,0,0,0,0,0,0,0,0,]
@@ -10,6 +9,7 @@ def encode(lbls):
     aL = np.zeros([10, nb], dtype = float)
     aL[lbls, np.arange(nb)] = 1
     return aL
+
 #decodes labels 
 def decode(aL):
     return np.argmax(aL, axis= 0)
@@ -56,6 +56,7 @@ def Update(biases, weights, model_input, labels, learning_rate):
     z = []
     a = []
     a.append(ai)
+    
     # for every layer in model
     for bias, weight in zip(biases, weights):
           
