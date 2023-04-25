@@ -1,16 +1,12 @@
 from app import app
-from flask import render_template, request, jsonify
+from flask import render_template, request
 import urllib
 import numpy as np
-import cv2
-from time import sleep
-import webbrowser
 import os
 import dotenv
-from PIL import Image, ImageEnhance, ImageFilter
+from PIL import Image
 import base64
 from io import BytesIO
-import csv
 from app.perceptron import forward, decode
 
 

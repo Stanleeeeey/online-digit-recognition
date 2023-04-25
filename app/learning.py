@@ -1,4 +1,6 @@
 from app.perceptron import *
+import os
+from PIL import Image
 
 def load_data():
     labels = []

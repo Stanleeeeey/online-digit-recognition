@@ -2,8 +2,6 @@
 import numpy as np
 import os
 from PIL import Image
-
-
 import numpy as np
 
 #encodes labels ex. 1 -> [0,1,0,0,0,0,0,0,0,0,]
