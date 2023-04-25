@@ -11,11 +11,11 @@ from threading import Thread
 #create flask app
 app = Flask(__name__)
 
-from app import routes, perceptron
+from app import routes, learning
 
 #create threads for training and web app
 webapp = Thread(target = app.run)
-train  = Thread(target = perceptron.run)
+train  = Thread(target = learning.run)
 
 #start threads
 webapp.start()
