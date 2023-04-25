@@ -48,7 +48,7 @@ def run():
         labels, images = zip(*zipped)
 
         #create batches of data
-        labels = [np.array(labels[slice(i, i+BATCH_SIZE, 1)])[:,:,0] for i in range(i, len(labels), BATCH_SIZE)]
+        labels = [np.array(labels[slice(i, i+BATCH_SIZE, 1)])[:,:,0].T for i in range(i, len(labels), BATCH_SIZE)]
         images = [np.array(images[slice(i, i+BATCH_SIZE, 1)])[:,:,0].T for i in range(i, len(images), BATCH_SIZE)]
         #for every image in images, labels
         for img, lbl in zip(images, labels):
