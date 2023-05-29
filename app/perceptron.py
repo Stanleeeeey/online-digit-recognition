@@ -79,7 +79,7 @@ def Update(biases, weights, model_input, labels, learning_rate):
 
     for layer_index in range(len(weights)-1, 0, -1):
         #calculate new delta
-        dlt =  weights[layer_index].T@ dlt * sgm_prime(z[layer_index-1]) 
+        dlt =  weights[layer_index].T@dlt * sgm_prime(z[layer_index-1]) 
 
         #calculate biases, weights
         new_biases[layer_index-1][:,0] = new_biases[layer_index-1][:,0] - learning_rate*dlt.sum(axis=1)

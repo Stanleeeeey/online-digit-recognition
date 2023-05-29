@@ -3,7 +3,7 @@ import os
 from PIL import Image
 import random
 
-BATCH_SIZE = 10
+BATCH_SIZE = 100
 
 def load_data():
     labels = []
@@ -48,15 +48,15 @@ def run():
         labels, images = zip(*zipped)
 
         #create batches of data
-        labels = [np.array(labels[slice(i, i+BATCH_SIZE, 1)])[:,:,0].T for i in range(i, len(labels), BATCH_SIZE)]
-        images = [np.array(images[slice(i, i+BATCH_SIZE, 1)])[:,:,0].T for i in range(i, len(images), BATCH_SIZE)]
+        #labels = [np.array(labels[slice(i, i+BATCH_SIZE, 1)])[:,:,0].T for i in range(i, len(labels), BATCH_SIZE)]
+        #images = [np.array(images[slice(i, i+BATCH_SIZE, 1)])[:,:,0].T for i in range(i, len(images), BATCH_SIZE)]
+        
         #for every image in images, labels
-        for img, lbl in zip(images, labels):
-            
-            net, err = Update(*net, model_input=img, labels=lbl, learning_rate=0.3)
-            print(err)
-        #    break
-        #break
+        #for img, lbl in zip(images, labels):
+        for i in range(200):
+            net, err = Update(*net, model_input=np.array(images)[:,:,0].T, labels=np.array(labels)[:,:,0].T, learning_rate=0.3)
+        print(err)
+
         if i%50 ==0:
             
             with open(os.path.join(os.getcwd(), f'app/static/net/net.npy'), 'wb') as f:
